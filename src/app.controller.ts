@@ -1,14 +1,16 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) { }
 
   @ApiTags('')
   @Get()
-  getHello(): Object {
-    return this.appService.getHello();
+  getHello() {
+    return {
+      title: 'Nobel E-Commerce RESTful API',
+      logo: '',
+      docs: 'http://localhost:3001/docs'
+    };
   }
 }
