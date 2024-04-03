@@ -43,7 +43,7 @@ export class EmailService {
         subject: `Security alert from Nobel E-Commerce`,
         html: html,
       };
-      transporter.sendMail(mail_configs, function (error, info) {
+      transporter.sendMail(mail_configs, function (error: any, info: any) {
         if (error) {
           throw new InternalServerErrorException(`Error while sending`);
         }
@@ -92,7 +92,7 @@ export class EmailService {
         html: html,
       };
 
-      transporter.sendMail(mail_configs, function (error, info) {
+      transporter.sendMail(mail_configs, function (error: any, info: any) {
         if (error) {
           return new InternalServerErrorException(`Error while sending...`);
         }
@@ -143,7 +143,7 @@ export class EmailService {
         subject: `Your Nobel E-Commerce account have been created.`,
         html: html,
       };
-      transporter.sendMail(mail_configs, async function (error, info) {
+      transporter.sendMail(mail_configs, async function (error: any, info: any) {
         if (error) {
           // console.log('not sent!!')
           return new InternalServerErrorException(`Error while sending`);

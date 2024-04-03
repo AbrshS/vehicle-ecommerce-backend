@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsIn, IsNotEmpty, IsString, Length, MaxLength, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class User {
     @ApiProperty({
         description: 'first name',
+        default: 'Belay',
         type: String,
     })
     @IsNotEmpty()
@@ -12,33 +13,32 @@ export class User {
 
     @ApiProperty({
         description: 'last name',
+        default: 'Birhanu',
         type: String,
     })
     @IsNotEmpty()
     @IsString()
     lastName: string;
 
-
     @ApiProperty({
-        description: 'email',
+        description: 'Email should be valid, for notification',
+        default: 'example@gmail.com',
         type: String,
     })
     @IsNotEmpty()
     @IsEmail()
     email: string;
 
-    @ApiProperty({
-        description: `phone number`,
-        type: String,
-    })
-    @Length(9)
-    phone: string;
 
     @ApiProperty({
-        description: `role`,
-        type: String,
+        description: 'password',
+        default: '12ab',
+        minLength: 4,
+        maxLength: 20,
     })
-    @IsNotEmpty()
     @IsString()
-    role: string;
+    @IsNotEmpty()
+    @MinLength(4)
+    @MaxLength(20)
+    password: string;
 }

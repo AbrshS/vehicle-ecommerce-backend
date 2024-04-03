@@ -19,6 +19,11 @@ export class AuthController {
     return user;
   }
 
+  @Post('signup')
+  async signUp(@Body() user: User): Promise<Object> {
+    return this.authService.signUp(user);
+  }
+
   @Post('signin')
   @HttpCode(HttpStatus.ACCEPTED)
   async signin(@Body() dto: AuthDto): Promise<Object> {

@@ -14,6 +14,7 @@ import * as bcrypt from 'bcrypt';
 import { AuthDto, ChangePassword, ForgotPasswordEmail, IsValidCode, ResetPasswordDto } from './dto';
 import { EmailService } from '../email/email.service';
 import randomPasswordGenerator from '../utils/randomPasswordGenerator';
+import { User } from '../modules/dto';
 
 @Injectable()
 export class AuthService {
@@ -23,6 +24,49 @@ export class AuthService {
     private jwtService: JwtService,
     private emailService: EmailService,
   ) { }
+
+  // signup service logic
+
+  async signUp(user: User): Promise<Object> {
+
+    const isEmailUnique = await this.database.user.findUnique({
+      where: { email: user.email }
+    })
+
+    if (isEmailUnique) {
+      throw new NotAcceptableException('Email already taken.')
+    }
+
+    const password = user.password;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await this.database.user.create({
+      data: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        password: hashedPassword,
+        role: 'CUSTOMER' // Default role.
+
+      }
+    });
+
+    await this.signToken(newUser.id, user.email);
+
+    // this verifies as the user token is updated
+    const updatedUser = await this.database.user.findUnique({
+      where: { id: newUser.id },
+    });
+    const fullName = updatedUser.firstName + ' ' + updatedUser.lastName;
+    await this.emailService.sendNoticeAccountCreated(updatedUser.email, updatedUser.email, password, fullName);
+
+    delete updatedUser.password;
+    delete updatedUser.verificationCode;
+    delete updatedUser.lastLoggedIn;
+
+    return updatedUser;
+  }
+
 
   // signin service logic.
   async signin(@Body() dto: AuthDto): Promise<Object> {
@@ -62,7 +106,8 @@ export class AuthService {
     });
 
     delete updatedUser.password;
-    // delete updatedUser.verificationCode;
+    delete updatedUser.verificationCode;
+    delete updatedUser.lastLoggedIn;
 
     return updatedUser;
   }

@@ -5,6 +5,7 @@ export class AppService {
   getHello(): Object {
     return {
       title: 'Nobel E-Commerce RESTful API',
+      logo: '',
       docs: 'http://localhost:3001/docs'
     };
   }

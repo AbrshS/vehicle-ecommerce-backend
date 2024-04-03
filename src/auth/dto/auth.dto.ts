@@ -18,7 +18,7 @@ export class AuthDto {
   })
   @IsString()
   @IsNotEmpty()
-  @MinLength(8)
+  @MinLength(4)
   @MaxLength(20)
   password: string;
 }
