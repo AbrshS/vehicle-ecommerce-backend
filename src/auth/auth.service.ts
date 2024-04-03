@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 
-import { AuthDto, ChangePassword, ForgotPasswordEmail, IsValidCode, ResetPasswordDto } from './dto';
+import { AuthDto, ChangePassword, ForgotPasswordEmail, IsValidCode, ResetPasswordDto, UserJWT } from './dto';
 import { EmailService } from '../email/email.service';
 import randomPasswordGenerator from '../utils/randomPasswordGenerator';
 import { User } from '../modules/dto';
@@ -47,11 +47,10 @@ export class AuthService {
         email: user.email,
         password: hashedPassword,
         role: 'CUSTOMER' // Default role.
-
       }
     });
 
-    await this.signToken(newUser.id, user.email);
+    await this.signToken(newUser);
 
     // this verifies as the user token is updated
     const updatedUser = await this.database.user.findUnique({
@@ -96,9 +95,8 @@ export class AuthService {
 
     // send back the user
     delete user.password;
-    // return await this.signToken(user.id, user.email);
 
-    user['token'] = await this.signToken(user.id, user.email);
+    user['token'] = await this.signToken(user);
 
     // this verifies as the user token is updated
     const updatedUser = await this.database.user.findUnique({
@@ -113,11 +111,17 @@ export class AuthService {
   }
 
   // This method generates a token from user id and email.
-  async signToken(userId: string, email: string): Promise<string> {
+  async signToken(user: UserJWT): Promise<string> {
     // payload is materials used by jwtService to generate unique token.
     const payload = {
-      sub: userId,
-      email,
+      sub: user.id,
+      fullName: user.firstName + user.lastName,
+      phone: user.phone,
+      email: user.email,
+      role: user.role,
+      avatarPath: user.avatarPath,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
     };
 
     // secret code assigned at .env file. used to generate token.
@@ -131,7 +135,7 @@ export class AuthService {
 
     // update the database with new v.code and token.
     await this.database.user.update({
-      where: { id: userId },
+      where: { id: user.id },
       data: {
         token: token,
         lastLoggedIn: new Date(),

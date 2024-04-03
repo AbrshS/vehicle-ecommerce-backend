@@ -1,14 +1,17 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { RolesGuard } from '../../auth/guard'
-import { Roles } from '../../auth/decorator';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-@Controller('product')
+import { RoleGuard } from '../../auth/guard'
+import { Roles } from '../../auth/decorator';
+import { Role } from '../../auth/enum';
+
 @ApiTags('product')
+@Controller('product')
 export class ProductController {
     @Get('/findAll')
-    @Roles('ADMIN')
-    @UseGuards(RolesGuard)
+    @ApiBearerAuth()
+    @UseGuards(RoleGuard)
+    @Roles(Role.Admin)
     findAll(): string {
         return 'This action returns all products';
     }

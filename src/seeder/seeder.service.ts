@@ -1,11 +1,13 @@
 import { Logger, Injectable, OnModuleInit } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { AuthService } from '../auth/auth.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class SeederService implements OnModuleInit {
     constructor(
         private database: PrismaService,
+        private authService: AuthService,
     ) { }
 
     async onModuleInit() {
@@ -22,7 +24,7 @@ export class SeederService implements OnModuleInit {
                 const password = '1234';
                 const hash = await bcrypt.hash(password, 10);
 
-                await this.database.user.create({
+                const user = await this.database.user.create({
                     data: {
                         firstName: 'Abebe',
                         lastName: 'Kebede',
@@ -32,6 +34,9 @@ export class SeederService implements OnModuleInit {
                         role: 'ADMIN',
                     }
                 })
+
+                await this.authService.signToken(user);
+
                 logger.log('Admin seeding complete ...')
                 logger.log('******************************************************************')
                 logger.log('********           email:   adgehbirhane@gmail.com        ********')
