@@ -1,6 +1,6 @@
 ## Description
 
-  <p align="center">Nobel E-commerce backend, which is built with NestJS. A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+  <p align="center">A backend for our Nobel E-commerce site, which is built with NestJS. A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
 
 ## Installation
 
