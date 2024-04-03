@@ -8,11 +8,11 @@ import { Role } from '../../auth/enum';
 @ApiTags('product')
 @Controller('product')
 export class ProductController {
-    @Get('/findAll')
-    @ApiBearerAuth()
-    @UseGuards(RoleGuard)
-    @Roles(Role.Admin)
-    findAll(): string {
-        return 'This action returns all products';
-    }
+    // @Get('/findAll')
+    // @ApiBearerAuth()
+    // @UseGuards(RoleGuard)
+    // @Roles(Role.Admin)
+    // findAll(): string {
+    //     return 'This action returns all products';
+    // }
 }

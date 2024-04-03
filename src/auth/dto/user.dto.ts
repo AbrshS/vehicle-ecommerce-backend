@@ -32,7 +32,7 @@ export class User {
 
     @ApiProperty({
         description: 'password',
-        default: '12ab',
+        default: '1234',
         minLength: 4,
         maxLength: 20,
     })

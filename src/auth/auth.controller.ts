@@ -4,7 +4,7 @@ import { AuthDto, ChangePassword, ForgotPasswordEmail, IsValidCode, ResetPasswor
 import { AuthService } from './auth.service';
 import { JwtGuard } from '../auth/guard';
 import { GetUser } from '../auth/decorator';
-import { User } from '../modules/dto';
+import { User } from './dto';
 
 @Controller('auth')
 @ApiTags('auth')

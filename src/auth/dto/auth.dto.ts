@@ -13,6 +13,7 @@ export class AuthDto {
 
   @ApiProperty({
     description: 'password',
+    default: '1234',
     minLength: 4,
     maxLength: 20,
   })

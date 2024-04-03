@@ -14,7 +14,7 @@ import * as bcrypt from 'bcrypt';
 import { AuthDto, ChangePassword, ForgotPasswordEmail, IsValidCode, ResetPasswordDto, UserJWT } from './dto';
 import { EmailService } from '../email/email.service';
 import randomPasswordGenerator from '../utils/randomPasswordGenerator';
-import { User } from '../modules/dto';
+import { User } from './dto';
 
 @Injectable()
 export class AuthService {
